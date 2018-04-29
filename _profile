@@ -1,0 +1,110 @@
+# OS specifics
+
+if [ "$(uname -s)" = "NetBSD" ]; then
+	PREFIX=/usr/pkg
+	is_netbsd=yes
+else
+	PREFIX=/usr/local
+fi
+
+PATH=${PREFIX}/sbin:${PREFIX}/bin:$PATH:/sbin:/usr/sbin:/usr/X11R7/bin:$HOME/bin:$HOME/node_modules/.bin:$HOME/pkg/bin:$HOME/ssh
+EDITOR=vim
+VISUAL=$EDITOR
+CVSEDITOR=$EDITOR
+PKGEDITOR=$EDITOR
+PAGER=less
+ENV=$HOME/.shrc
+GOPATH=$HOME/go
+
+export PATH EDITOR VISUAL CVSEDITOR PKGEDITOR PAGER ENV
+
+[ -z "$ZSH" ] && \
+	PS1="(\u@\[\e[1;32m\]\h\[\e[0m\]):[\w]\n$ " \
+	HISTTIMEFORMAT="$(echo -e '\r\e[K')"
+
+LANG="en_US.UTF-8"
+LC_CTYPE="en_US.UTF-8"
+LC_MESSAGES="en_US.UTF-8"
+LC_COLLATE="C"
+LC_TIME="C"
+LC_NUMERIC="C"
+LC_MONETARY="C"
+LC_ALL=""
+export LANG LC_CTYPE LC_MESSAGES
+export LC_COLLATE LC_TIME LC_NUMERIC LC_MONETARY LC_ALL
+
+# allow ^Q for screen / tmux
+stty -ixon
+
+alias ls='ls -F'
+alias nocom="egrep -v '^[[:space:]]*(#|$)'"
+alias en2es="trans --brief -to es"
+alias diff='colordiff'
+alias ytrip="youtube-dl -x --audio-quality 0"
+
+# load specific profile defs
+[ -f "${HOME}/.local_profile" ] && . ${HOME}/.local_profile
+
+# helper functions
+
+sslconnect()
+{
+	openssl s_client -connect $1:$2 -crlf
+}
+
+ssh_copy_id()
+{
+	[ -z "$is_netbsd" ] && ssh-copy-id $@ && return
+
+	[ -f ~/.ssh/id_rsa.pub ] && PK=id_rsa || PK=id_dsa
+
+	cat ~/.ssh/${PK}.pub |	\
+		ssh $1 "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"
+}
+
+dos2unix()
+{
+	mv -f $1 $1.dos
+	tr -d '\r' < $1.dos > $1
+}
+
+isomount()
+{
+	[ -z "$1" ] || [ -z "$2" ] \
+		&& echo "usage: isomount <iso> <dir>" && return
+
+	[ -z "$is_netbsd" ] && sudo mount -o loop "$1" "$2" && return
+
+	sudo vnconfig -v -c /dev/vnd0d "$1"
+	sudo mount -t cd9660 /dev/vnd0a "$2"
+}
+
+isoumount()
+{
+	[ -z $1 ] && echo "usage: isoumount <dir>" && return
+
+	sudo umount "$1"
+
+	[ ! -z "$is_netbsd" ] && sudo vnconfig -u vnd0d
+}
+
+rmknownhost()
+{
+	[ ! -z "$is_netbsd" ] && SED=gsed || SED=sed
+
+	[ -z $1 ] && echo "usage: $0 /path/to/known_hosts:line" && return
+	${SED} -i ${1#*:}d ${1%:*}
+}
+
+sslexpire()
+{
+	echo | openssl s_client -showcerts -connect ${1}:443 2>/dev/null | \
+		openssl x509 -noout -dates
+}
+
+killhup()
+{
+	kill -HUP `cat /var/run/${1}.pid`
+}
+
+sshvia() { ssh -o ProxyCommand="ssh -A $1 -W $2:${3:-22}" $2 $@ }
