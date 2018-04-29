@@ -43,6 +43,7 @@ alias diff='colordiff'
 alias ytrip="youtube-dl -x --audio-quality 0"
 alias myip="curl -o- -s imil.net/if" # use at your own risk
 alias aws_enable=". ~/ve/aws/bin/activate"
+. ~/ve/aws/bin/aws_zsh_completer.sh
 
 # load specific profile defs
 [ -f "${HOME}/.local_profile" ] && . ${HOME}/.local_profile
