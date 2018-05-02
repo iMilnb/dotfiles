@@ -7,7 +7,7 @@ else
 	PREFIX=/usr/local
 fi
 
-PATH=${PREFIX}/sbin:${PREFIX}/bin:$PATH:/sbin:/usr/sbin:/usr/X11R7/bin:$HOME/bin:$HOME/node_modules/.bin:$HOME/pkg/bin:$HOME/ssh
+PATH=${PATH}:${PREFIX}/sbin:${PREFIX}/bin:/sbin:/usr/sbin:/usr/X11R7/bin:${HOME}/bin:${HOME}/node_modules/.bin:${HOME}/pkg/bin:${HOME}/ssh
 EDITOR=vim
 VISUAL=$EDITOR
 CVSEDITOR=$EDITOR
