@@ -38,8 +38,11 @@ au BufRead,BufNewFile *.md,*.markdown setlocal filetype=markdown
 
 au FileType c colorscheme molokai
 au FileType python set ts=4 expandtab
+au FileType yaml set ts=2 expandtab
 au FileType markdown set tw=0
 au FileType go set ts=4
+au FileType dockerfile set ts=4 expandtab
+au FileType html set ts=2 expandtab nowrap
 
 set list listchars=tab:»\ 
 
@@ -58,10 +61,18 @@ if has("gui_running")
 endif
 
 " inside screen / tmux
-map <Esc>[C <C-Right>
-map <Esc>[D <C-Left>
-map! <Esc>[C <C-Right>
-map! <Esc>[D <C-Left>
+if match($TERM, "screen")!=-1
+	map <Esc>[C <C-Right>
+	map <Esc>[D <C-Left>
+	map! <Esc>[C <C-Right>
+	map! <Esc>[D <C-Left>
+else
+" no screen
+	map <Esc>[1;5D <C-Left>
+	map <Esc>[1;5C <C-Right>
+	map! <Esc>[1;5D <C-Left>
+	map! <Esc>[1;5C <C-Right>
+endif
 
 nnoremap <C-t> :tabnew<CR>
 nnoremap <C-w> :tabclose<CR>
