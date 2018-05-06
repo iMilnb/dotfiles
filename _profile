@@ -110,4 +110,4 @@ killhup()
 	kill -HUP `cat /var/run/${1}.pid`
 }
 
-sshvia() { ssh -o ProxyCommand="ssh -A $1 -W $2:${3:-22}" $2 $@ }
+sshvia() { ssh -o ProxyCommand="ssh -A $1 -W $2:${3:-22}" $2 }
