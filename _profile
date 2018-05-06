@@ -43,7 +43,8 @@ alias diff='colordiff'
 alias ytrip="youtube-dl -x --audio-quality 0"
 alias myip="curl -o- -s imil.net/if" # use at your own risk
 alias aws_enable=". ~/ve/aws/bin/activate"
-. ~/ve/aws/bin/aws_zsh_completer.sh
+
+[ -d ~/ve/aws ] && . ~/ve/aws/bin/aws_zsh_completer.sh
 
 # load specific profile defs
 [ -f "${HOME}/.local_profile" ] && . ${HOME}/.local_profile
@@ -110,4 +111,4 @@ killhup()
 	kill -HUP `cat /var/run/${1}.pid`
 }
 
-sshvia() { ssh -o ProxyCommand="ssh -A $1 -W $2:${3:-22}" $2 $@ }
+sshvia() { ssh -o ProxyCommand="ssh -A $1 -W $2:${3:-22}" $2 }

@@ -38,8 +38,10 @@ au BufRead,BufNewFile *.md,*.markdown setlocal filetype=markdown
 
 au FileType c colorscheme molokai
 au FileType python set ts=4 expandtab
+au FileType yaml set ts=2 expandtab
 au FileType markdown set tw=0
 au FileType go set ts=4
+au FileType dockerfile set ts=4 expandtab
 au FileType yaml set ts=2 expandtab
 au FileType html set ts=2 expandtab nowrap
 
