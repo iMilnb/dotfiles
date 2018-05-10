@@ -16,7 +16,7 @@ PAGER=less
 ENV=$HOME/.shrc
 GOPATH=$HOME/pkg/go
 
-export PATH EDITOR VISUAL CVSEDITOR PKGEDITOR PAGER ENV
+export PATH EDITOR VISUAL CVSEDITOR PKGEDITOR PAGER ENV GOPATH
 
 [ -z "$ZSH" ] && \
 	PS1="(\u@\[\e[1;32m\]\h\[\e[0m\]):[\w]\n$ " \
