@@ -5,6 +5,8 @@ if [ "$(uname -s)" = "NetBSD" ]; then
 	is_netbsd=yes
 else
 	PREFIX=/usr/local
+
+	[ "$(uname -s)" = "Linux" ] && is_linux=yes
 fi
 
 EDITOR=vim
@@ -38,7 +40,9 @@ export LC_COLLATE LC_TIME LC_NUMERIC LC_MONETARY LC_ALL
 # allow ^Q for screen / tmux
 stty -ixon
 
-alias ls='ls -F'
+[ "${is_linux}" ] && lscolors="--color"
+
+alias ls="ls -F ${lscolors}"
 alias nocom="egrep -v '^[[:space:]]*(#|$)'"
 alias en2es="trans --brief -to es"
 alias diff='colordiff'
